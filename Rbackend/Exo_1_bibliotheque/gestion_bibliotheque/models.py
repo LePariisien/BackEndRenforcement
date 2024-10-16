@@ -5,7 +5,6 @@ class Auteur(models.Model):
     name = models.CharField(max_length=255)
     biographie = models.TextField()
     birthday = models.DateField()
-    deadday = models.DateField(null=True, blank=True)  # Optionnel
     nationality = models.CharField(max_length=100)
 
     def __str__(self):
