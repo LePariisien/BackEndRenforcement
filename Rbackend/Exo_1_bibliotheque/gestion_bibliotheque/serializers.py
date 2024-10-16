@@ -17,23 +17,12 @@ class EditeurSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class LivreSerializer(serializers.ModelSerializer):
-    editeur = serializers.PrimaryKeyRelatedField(queryset=Editeur.objects.all())
-    categorie = serializers.PrimaryKeyRelatedField(queryset=Categorie.objects.all())
-    auteurs = serializers.PrimaryKeyRelatedField(many=True, queryset=Auteur.objects.all())
-    class Meta:
-        model = Livre
-        fields = '__all__'
-
-    def create(self, validated_data):
-        auteurs_data = validated_data.pop('auteurs') 
-        livre = Livre.objects.create(**validated_data)
-        livre.auteurs.set(auteurs_data) 
-        return livre
-
-    def update(self, instance, validated_data):
-        auteurs_data = validated_data.pop('auteurs')
-        instance.auteurs.set(auteurs_data) 
-        return super().update(instance, validated_data)
+        auteur = AuteurSerializer(many=True, read_only=True)
+        categorie = serializers.StringRelatedField()
+        editeur = serializers.StringRelatedField()
+        class Meta:
+            model = Livre
+            fields = '__all__'
 
 class ExemplaireSerializer(serializers.ModelSerializer):
     livre = LivreSerializer()
