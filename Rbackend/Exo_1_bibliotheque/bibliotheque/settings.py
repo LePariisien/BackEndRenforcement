@@ -29,7 +29,13 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_filters',
     'gestion_bibliotheque',
-    
+    'django_otp',
+    'django_otp.plugins.otp_totp',  # Pour les codes TOTP (Google Authenticator)
+    #'django_otp.plugins.otp_email',
+    # 'two_factor',
+    # 'two_factor.plugins.email',
+    # 'django.contrib.sites',
+
 ]
 
 REST_FRAMEWORK = {
@@ -37,6 +43,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework_simplejwt.authentication.JWTAuthentication'],
+    'DEFAULT_THROTTLE_CLASSES': [
+         'rest_framework.throttling.UserRateThrottle',
+         'rest_framework.throttling.AnonRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+         'user': '5/min',
+         'anon': '3/min',
+    },
 }
 
 MIDDLEWARE = [
@@ -47,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'django_otp.middleware.OTPMiddleware',
 ]
 
 ROOT_URLCONF = 'bibliotheque.urls'
@@ -86,16 +101,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 13,
+        }
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'bibliotheque.validators.CustomPasswordValidator',
     },
 ]
 
@@ -121,3 +136,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.example.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your-email@example.com'
+# EMAIL_HOST_PASSWORD = 'your-email-password'
+# DEFAULT_FROM_EMAIL = 'your-email@example.com'
