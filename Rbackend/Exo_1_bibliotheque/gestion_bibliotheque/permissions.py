@@ -14,11 +14,11 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         # Sinon, vérifier que l'utilisateur est le propriétaire de l'objet
         return obj.utilisateur == request.user
 
-class Editor(permissions.BasePermission):
+class Author(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
-        if request.user.groups.filter(name='Editor').exists():
+        if request.user.groups.filter(name='Author').exists():
             return True
         raise PermissionDenied(detail="Vous n'avez pas les permissions nécessaires pour modifier ces données.")
 
