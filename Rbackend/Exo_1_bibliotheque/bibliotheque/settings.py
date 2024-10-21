@@ -31,10 +31,6 @@ INSTALLED_APPS = [
     'gestion_bibliotheque',
     'django_otp',
     'django_otp.plugins.otp_totp',  # Pour les codes TOTP (Google Authenticator)
-    #'django_otp.plugins.otp_email',
-    # 'two_factor',
-    # 'two_factor.plugins.email',
-    # 'django.contrib.sites',
 
 ]
 
@@ -137,9 +133,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.example.com'
-# EMAIL_PORT = 587
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = './sent_emails'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'your-email@example.com'
 # EMAIL_HOST_PASSWORD = 'your-email-password'
